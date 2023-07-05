@@ -4,7 +4,7 @@ import { literal } from 'lit/static-html.js';
 import { describe, expect, it } from 'vitest';
 
 // Use manual per-module import/export to support vitest environment on Node.js
-import { DividerBlockSchema } from '../../../blocks/src/divider-block/divider-model.js';
+import { SymbolRefBlockSchema } from '../../../blocks/src/divider-block/symbol-ref-model';
 import { ListBlockSchema } from '../../../blocks/src/list-block/list-model.js';
 import { NoteBlockSchema } from '../../../blocks/src/note-block/note-model.js';
 import { PageBlockSchema } from '../../../blocks/src/page-block/page-model.js';
@@ -50,7 +50,7 @@ const BlockSchemas = [
   PageBlockSchema,
   ListBlockSchema,
   NoteBlockSchema,
-  DividerBlockSchema,
+  SymbolRefBlockSchema,
   TestCustomNoteBlockSchema,
   TestInvalidNoteBlockSchema,
 ];

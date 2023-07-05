@@ -8,7 +8,7 @@ import { Awareness } from 'y-protocols/awareness.js';
 import { applyUpdate, encodeStateAsUpdate } from 'yjs';
 
 // Use manual per-module import/export to support vitest environment on Node.js
-import { DividerBlockSchema } from '../../../blocks/src/divider-block/divider-model.js';
+import { SymbolRefBlockSchema } from '../../../blocks/src/divider-block/symbol-ref-model';
 import { ListBlockSchema } from '../../../blocks/src/list-block/list-model.js';
 import { NoteBlockSchema } from '../../../blocks/src/note-block/note-model.js';
 import { PageBlockSchema } from '../../../blocks/src/page-block/page-model.js';
@@ -29,7 +29,7 @@ export const BlockSchemas = [
   PageBlockSchema,
   ListBlockSchema,
   NoteBlockSchema,
-  DividerBlockSchema,
+  SymbolRefBlockSchema,
 ];
 
 const defaultPageId = 'page0';

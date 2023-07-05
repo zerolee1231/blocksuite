@@ -1,3 +1,3 @@
-export * from './divider-block.js';
-export * from './divider-model.js';
-export * from './divider-service.js';
+export * from './symbol-ref-block.js';
+export * from './symbol-ref-model.js';
+export * from './symbol-ref-service.js';

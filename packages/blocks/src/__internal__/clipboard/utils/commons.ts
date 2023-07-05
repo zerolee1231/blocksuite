@@ -103,7 +103,6 @@ function createPageClipboardItems(range: BlockRange) {
 
 export function copyBlocks(range: BlockRange) {
   const clipboardItems = createPageClipboardItems(range);
-
   const savedRange = hasNativeSelection() ? getCurrentNativeRange() : null;
 
   performNativeCopy(clipboardItems);

@@ -10,7 +10,6 @@ import {
   NewPageIcon,
   NowIcon,
   paragraphConfig,
-  // PasteIcon,
   TodayIcon,
   TomorrowIcon,
   YesterdayIcon,
@@ -37,12 +36,14 @@ import {
 } from '../../__internal__/utils/index.js';
 import { clearMarksOnDiscontinuousInput } from '../../__internal__/utils/virgo.js';
 import { getBookmarkInitialProps } from '../../bookmark-block/utils.js';
+import { NoteBlockSchema } from '../../note-block/index.js';
 import { copyBlock } from '../../page-block/default/utils.js';
 import { formatConfig } from '../../page-block/utils/format-config.js';
 import {
   onModelTextUpdated,
   updateBlockType,
 } from '../../page-block/utils/index.js';
+import type { SymbolBlockModel } from '../../symbol-block/index.js';
 import { showLinkedPagePopover } from '../linked-page/index.js';
 import { toast } from '../toast.js';
 
@@ -368,6 +369,35 @@ export const menuGroups: { name: string; items: SlashItem[] }[] = (
           },
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           action: ({ model }) => {},
+        },
+      ],
+    },
+    {
+      name: 'Synced Block',
+      items: [
+        {
+          name: 'Synced Block',
+          alias: ['ref'],
+          icon: DatabaseTableViewIcon,
+          showWhen: model => {
+            const parent = model.page.getParent(model);
+            return parent?.flavour === NoteBlockSchema.model.flavour;
+          },
+          action: async ({ page, model }) => {
+            const parent = page.getParent(model);
+            assertExists(parent);
+            const index = parent.children.indexOf(model);
+
+            const id = page.addBlock(
+              'affine:symbol',
+              {},
+              page.getParent(model),
+              index + 1
+            );
+
+            const service = await getServiceOrRegister('affine:symbol');
+            service.init(page.getBlockById(id) as SymbolBlockModel);
+          },
         },
       ],
     },

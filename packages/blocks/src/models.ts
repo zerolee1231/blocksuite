@@ -11,8 +11,8 @@ import {
 } from './code-block/code-model.js';
 import type { DatabaseBlockModel } from './database-block/database-model.js';
 import { DatabaseBlockSchema } from './database-block/database-model.js';
-import type { DividerBlockModel } from './divider-block/divider-model.js';
-import { DividerBlockSchema } from './divider-block/divider-model.js';
+import type { SymbolRefBlockModel } from './divider-block/symbol-ref-model.js';
+import { SymbolRefBlockSchema } from './divider-block/symbol-ref-model.js';
 import type { ImageBlockModel } from './image-block/image-model.js';
 import { ImageBlockSchema } from './image-block/image-model.js';
 import type { ListBlockModel } from './list-block/list-model.js';
@@ -25,18 +25,21 @@ import type { ParagraphBlockModel } from './paragraph-block/paragraph-model.js';
 import { ParagraphBlockSchema } from './paragraph-block/paragraph-model.js';
 import type { SurfaceBlockModel } from './surface-block/surface-model.js';
 import { SurfaceBlockSchema } from './surface-block/surface-model.js';
+import type { SymbolBlockModel } from './symbol-block/index.js';
+import { SymbolBlockSchema } from './symbol-block/index.js';
 
 export type {
   BookmarkBlockModel,
   CodeBlockModel,
   DatabaseBlockModel,
-  DividerBlockModel,
   ImageBlockModel,
   ListBlockModel,
   NoteBlockModel,
   PageBlockModel,
   ParagraphBlockModel,
   SurfaceBlockModel,
+  SymbolBlockModel,
+  SymbolRefBlockModel,
 };
 
 /** Built-in first party block models built for affine */
@@ -46,10 +49,11 @@ export const AffineSchemas: z.infer<typeof BlockSchema>[] = [
   PageBlockSchema,
   ListBlockSchema,
   NoteBlockSchema,
-  DividerBlockSchema,
+  SymbolRefBlockSchema,
   ImageBlockSchema,
   SurfaceBlockSchema,
   BookmarkBlockSchema,
+  SymbolBlockSchema,
   // DatabaseBlockSchema,
 ];
 
@@ -64,11 +68,12 @@ export type BlockSchemas = {
   'affine:page': PageBlockModel;
   'affine:list': ListBlockModel;
   'affine:note': NoteBlockModel;
-  'affine:divider': DividerBlockModel;
+  'affine:divider': SymbolRefBlockModel;
   'affine:image': ImageBlockModel;
   'affine:surface': SurfaceBlockModel;
   'affine:database': DatabaseBlockModel;
   'affine:bookmark': BookmarkBlockModel;
+  'affine:symbol': SymbolBlockModel;
 };
 
 export type Flavour = keyof BlockSchemas;

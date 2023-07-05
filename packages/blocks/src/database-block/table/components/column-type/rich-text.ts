@@ -127,7 +127,7 @@ export class RichTextCell extends DatabaseCellElement<Y.Text> {
     this.vEditor = new VEditor(value, {
       active: () => activeEditorManager.isActive(this),
     });
-    setupVirgoScroll(this.column.page, this.vEditor);
+    setupVirgoScroll(this, this.vEditor);
     this.vEditor.mount(this._container);
     this.vEditor.setReadonly(true);
   }
@@ -203,7 +203,7 @@ export class RichTextCellEditing extends DatabaseCellElement<Y.Text> {
     this.vEditor = new VEditor(value, {
       active: () => activeEditorManager.isActive(this),
     });
-    setupVirgoScroll(this.column.page, this.vEditor);
+    setupVirgoScroll(this, this.vEditor);
     this.vEditor.mount(this._container);
     this.vEditor.bindHandlers({
       keydown: this._handleKeyDown,

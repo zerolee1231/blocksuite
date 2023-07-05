@@ -224,6 +224,10 @@ export type SerializedBlock = {
   width?: number;
   height?: number;
   language?: string;
+  ref?: {
+    pageId: string;
+    blockId: string;
+  };
   databaseProps?: {
     id: string;
     title: string;

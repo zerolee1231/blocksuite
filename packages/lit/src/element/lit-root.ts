@@ -98,6 +98,42 @@ export class BlockSuiteRoot extends ShadowlessElement {
       )}`}
     ></${tag}>`;
   };
+  renderRemoteModel = (model: BaseBlockModel): TemplateResult => {
+    const { flavour, children } = model;
+    const schema = this.page.schema.flavourSchemaMap.get(flavour);
+    if (!schema) {
+      console.warn(`Cannot find schema for ${flavour}.`);
+      return html`${nothing}`;
+    }
+
+    const view = this.blockStore.getView(flavour);
+    if (!view) {
+      console.warn(`Cannot find view for ${flavour}.`);
+      return html`${nothing}`;
+    }
+
+    const tag = view.component;
+    const widgets = view.widgets
+      ? html`${repeat(view.widgets, widget => {
+          return html`<${widget} .root=${this} .model=${model}></${widget}>`;
+        })}`
+      : html`${nothing}`;
+
+    this._onLoadModel(model);
+
+    return html`<${tag}
+      ${unsafeStatic(this.blockIdAttr)}=${model.id}
+      .root=${this}
+      .page=${model.page}
+      .model=${model}
+      .widgets=${widgets}
+      .content=${html`${repeat(
+        children,
+        child => child.id,
+        child => this.renderModel(child)
+      )}`}
+    ></${tag}>`;
+  };
 
   _onLoadModel = (model: BaseBlockModel) => {
     const { id } = model;

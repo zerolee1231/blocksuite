@@ -242,7 +242,6 @@ export class EditorContainer
 
   override render() {
     if (!this.model) return null;
-
     const rootContainer = keyed(
       this.model.id,
       html`<block-suite-root

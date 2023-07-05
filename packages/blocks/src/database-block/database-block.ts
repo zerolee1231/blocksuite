@@ -34,7 +34,6 @@ export class DatabaseBlockComponent extends BlockElement<DatabaseBlockModel> {
   override render() {
     const views = this.model.getViewList();
     const current = views.find(v => v.id === this.currentView) ?? views[0];
-    // console.log(current);
     const databaseTag = literal`affine-database-${unsafeStatic(current.mode)}`;
     const view = this.model.page.awarenessStore.getFlag(
       'enable_database_filter'

@@ -183,6 +183,7 @@ export async function addSerializedBlocks(
       icon: json.icon,
       image: json.image,
       crawled: json.crawled,
+      ref: json.ref,
     };
     const id = page.addBlock(flavour, blockProps, parent, index + i);
     addedBlockIds.push(id);
