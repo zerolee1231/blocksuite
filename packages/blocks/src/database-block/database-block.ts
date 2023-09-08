@@ -10,7 +10,7 @@ import { PathFinder } from '@blocksuite/block-std';
 import { Slot } from '@blocksuite/global/utils';
 import { BlockElement } from '@blocksuite/lit';
 import { css, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { createRef } from 'lit/directives/ref.js';
 import { when } from 'lit/directives/when.js';
 import { html } from 'lit/static-html.js';
@@ -49,6 +49,7 @@ export class DatabaseBlockComponent extends BlockElement<DatabaseBlockModel> {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.observeLeftOffset();
     this._disposables.add(
       this.root.selectionManager.slots.changed.on(selections => {
         const databaseSelection = selections.find(
@@ -75,6 +76,23 @@ export class DatabaseBlockComponent extends BlockElement<DatabaseBlockModel> {
     });
   }
 
+  @state()
+  leftOffset: number = 0;
+  observeLeftOffset = () => {
+    const viewport = this.closest('.affine-doc-viewport');
+    if (!viewport) {
+      return;
+    }
+    const observer = new ResizeObserver(() => {
+      this.leftOffset =
+        this.getBoundingClientRect().left -
+        viewport.getBoundingClientRect().left;
+    });
+    observer.observe(viewport);
+    this.disposables.add({
+      dispose: () => observer.unobserve(viewport),
+    });
+  };
   private _view = createRef<DataViewExpose>();
 
   private _dataSource?: DataSource;
@@ -120,7 +138,10 @@ export class DatabaseBlockComponent extends BlockElement<DatabaseBlockModel> {
       viewMethods: DataViewExpose;
     }) => {
       return html`
-        <div style="margin-bottom: 16px;display:flex;flex-direction: column">
+        <div
+          style="margin-bottom: 16px;display:flex;flex-direction: column;padding-right: ${this
+            .leftOffset}px;padding-left: ${this.leftOffset}px"
+        >
           <div
             style="display:flex;align-items:center;gap:12px;padding: 0 6px;margin-bottom: 8px;"
           >
@@ -175,7 +196,10 @@ export class DatabaseBlockComponent extends BlockElement<DatabaseBlockModel> {
   };
   override render() {
     return html`
-      <div style="position: relative">
+      <div
+        style="position: relative;margin-left: -${this
+          .leftOffset}px;margin-right: -${this.leftOffset}px;"
+      >
         <affine-data-view-native
           .bindHotkey="${this._bindHotkey}"
           .handleEvent="${this._handleEvent}"
