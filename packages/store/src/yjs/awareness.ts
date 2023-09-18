@@ -16,6 +16,10 @@ export type RawAwarenessState<
   user?: UserInfo;
   flags: Flags;
   selection: Array<Record<string, unknown>>;
+  timer: {
+    id: string;
+    timestamp: number;
+  }[];
 };
 
 export interface AwarenessEvent<

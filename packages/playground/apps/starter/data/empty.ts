@@ -12,7 +12,29 @@ export const empty: InitFn = async (workspace: Workspace, id: string) => {
     title: new Text(),
   });
 
-  page.addBlock('affine:surface', {}, pageBlockId);
+  const surfaceId = page.addBlock('affine:surface', {}, pageBlockId);
+
+  page.addBlock(
+    'affine:surface-widget',
+    {
+      type: 'timer',
+      xywh: '[0,0,0,0]',
+      meta: {},
+    },
+    surfaceId
+  );
+
+  page.addBlock(
+    'affine:surface-widget',
+    {
+      type: 'vote',
+      xywh: '[500,0,0,0]',
+      meta: {
+        voters: [],
+      },
+    },
+    surfaceId
+  );
 
   // Add note block inside page block
   const noteId = page.addBlock('affine:note', {}, pageBlockId);

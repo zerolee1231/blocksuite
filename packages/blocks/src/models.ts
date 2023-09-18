@@ -31,6 +31,8 @@ import type { ParagraphBlockModel } from './paragraph-block/paragraph-model.js';
 import { ParagraphBlockSchema } from './paragraph-block/paragraph-model.js';
 import type { SurfaceBlockModel } from './surface-block/surface-model.js';
 import { SurfaceBlockSchema } from './surface-block/surface-model.js';
+import type { SurfaceWidgetModel } from './surface-widget-block/model.js';
+import { SurfaceWidgetSchema } from './surface-widget-block/model.js';
 
 export type {
   AttachmentBlockModel,
@@ -45,6 +47,7 @@ export type {
   PageBlockModel,
   ParagraphBlockModel,
   SurfaceBlockModel,
+  SurfaceWidgetModel,
 };
 
 /** Built-in first party block models built for affine */
@@ -59,6 +62,7 @@ export const AffineSchemas: z.infer<typeof BlockSchema>[] = [
   SurfaceBlockSchema,
   BookmarkBlockSchema,
   DatabaseBlockSchema,
+  SurfaceWidgetSchema,
 ];
 
 export const __unstableSchemas = [

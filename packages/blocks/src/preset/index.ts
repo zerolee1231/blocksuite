@@ -21,6 +21,7 @@ import {
 import { PageBlockSchema } from '../page-block/page-model.js';
 import { ParagraphBlockSchema } from '../paragraph-block/paragraph-model.js';
 import { SurfaceBlockSchema } from '../surface-block/surface-model.js';
+import { SurfaceWidgetSchema } from '../surface-widget-block/model.js';
 import { AFFINE_FORMAT_BAR_WIDGET_TAG } from '../widgets/format-bar/format-bar.js';
 import { AFFINE_REMOTE_SELECTION_WIDGET_TAG } from '../widgets/remote-selection/remote-selection.js';
 
@@ -212,6 +213,12 @@ export const edgelessPreset: LitBlockSpec[] = [
     schema: AttachmentBlockSchema,
     view: {
       component: literal`affine-attachment`,
+    },
+  },
+  {
+    schema: SurfaceWidgetSchema,
+    view: {
+      component: literal`affine-surface-widget`,
     },
   },
 ];

@@ -80,7 +80,7 @@ export const SurfaceBlockSchema = defineBlockSchema({
     version: 5,
     role: 'hub',
     parent: ['affine:page'],
-    children: [],
+    children: ['affine:surface-widget'],
   },
   onUpgrade: (data, previousVersion, version) => {
     if (previousVersion < 5 && version >= 5) {

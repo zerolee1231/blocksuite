@@ -198,6 +198,13 @@ export class EdgelessBlockContainer extends WithDisposable(LitElement) {
             .notes=${sortedNotes}
             .renderer=${renderModel.bind(this)}
           ></edgeless-notes-container>
+          <div>
+            ${repeat(
+              edgeless.surfaceBlockModel.children,
+              child => child.id,
+              child => renderModel.bind(this)(child)
+            )}
+          </div>
         </div>
       </div>
       <affine-selected-blocks
