@@ -57,7 +57,7 @@ export interface StoreOptions<
   id: string;
   providerCreators?: DocProviderCreator[];
   awareness?: Awareness<RawAwarenessState<Flags>>;
-  idGenerator?: Generator | IdGenerator;
+  idGenerator?: Generator;
   defaultFlags?: Partial<Flags>;
   blobStorages?: ((id: string) => BlobStorage)[];
 }
@@ -103,29 +103,25 @@ export class Store {
       merge(true, flagsPreset, defaultFlags)
     );
 
-    if (typeof idGenerator === 'function') {
-      this.idGenerator = idGenerator;
-    } else {
-      switch (idGenerator) {
-        case Generator.AutoIncrement: {
-          this.idGenerator = createAutoIncrementIdGenerator();
-          break;
-        }
-        case Generator.AutoIncrementByClientId: {
-          this.idGenerator = createAutoIncrementIdGeneratorByClientId(
-            this.doc.clientID
-          );
-          break;
-        }
-        case Generator.UUIDv4: {
-          this.idGenerator = uuidv4;
-          break;
-        }
-        case Generator.NanoID:
-        default: {
-          this.idGenerator = nanoid;
-          break;
-        }
+    switch (idGenerator) {
+      case Generator.AutoIncrement: {
+        this.idGenerator = createAutoIncrementIdGenerator();
+        break;
+      }
+      case Generator.AutoIncrementByClientId: {
+        this.idGenerator = createAutoIncrementIdGeneratorByClientId(
+          this.doc.clientID
+        );
+        break;
+      }
+      case Generator.UUIDv4: {
+        this.idGenerator = uuidv4;
+        break;
+      }
+      case Generator.NanoID:
+      default: {
+        this.idGenerator = nanoid;
+        break;
       }
     }
 
