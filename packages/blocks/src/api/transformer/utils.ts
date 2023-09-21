@@ -20,7 +20,7 @@ export const replaceIdMiddleware: JobMiddleware = ({ slots, workspace }) => {
   });
   slots.beforeImport.on(payload => {
     if (payload.type === 'page') {
-      payload.snapshot.meta.id = workspace.idGenerator('page');
+      payload.snapshot.meta.id = workspace.idGenerator();
       return;
     }
 
@@ -31,7 +31,7 @@ export const replaceIdMiddleware: JobMiddleware = ({ slots, workspace }) => {
       if (idMap.has(original)) {
         newId = idMap.get(original)!;
       } else {
-        newId = workspace.idGenerator('block');
+        newId = workspace.idGenerator();
         idMap.set(original, newId);
       }
       snapshot.id = newId;
