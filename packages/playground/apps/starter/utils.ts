@@ -242,7 +242,7 @@ export function createWorkspaceOptions(): WorkspaceOptions {
       enable_note_index: true,
       enable_bultin_ledits: true,
       readonly: {
-        'page:home': false,
+        'space:page0': false,
       },
     },
   };

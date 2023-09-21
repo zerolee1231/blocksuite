@@ -70,14 +70,14 @@ export class AwarenessStore<
     const flags = this.getFlag('readonly') ?? {};
     this.setFlag('readonly', {
       ...flags,
-      [space.id]: value,
+      [space.prefixedId]: value,
     } as Flags['readonly']);
   }
 
   isReadonly(space: Space): boolean {
     const rd = this.getFlag('readonly');
     if (rd && typeof rd === 'object') {
-      return Boolean((rd as Record<string, boolean>)[space.id]);
+      return Boolean((rd as Record<string, boolean>)[space.prefixedId]);
     } else {
       return false;
     }

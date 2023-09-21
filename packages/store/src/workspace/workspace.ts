@@ -67,7 +67,7 @@ export class Workspace extends WorkspaceAddonType {
   }
 
   get pages() {
-    return this._store.spaces as Map<string, Page>;
+    return this._store.spaces as Map<`space:${string}`, Page>;
   }
 
   get doc() {
@@ -87,11 +87,14 @@ export class Workspace extends WorkspaceAddonType {
   }
 
   private _hasPage(pageId: string) {
-    return this.pages.has(pageId);
+    return this.pages.has(`space:${pageId}`);
   }
 
   getPage(pageId: string): Page | null {
-    const space = this.pages.get(pageId) as Page | undefined;
+    const prefixedPageId = pageId.startsWith('space:')
+      ? (pageId as `space:${string}`)
+      : (`space:${pageId}` as const);
+    const space = this.pages.get(prefixedPageId) as Page | undefined;
 
     return space ?? null;
   }
@@ -137,7 +140,7 @@ export class Workspace extends WorkspaceAddonType {
     }
     // End of migration guide. Remove this in the next major version
 
-    const { id: pageId = this.idGenerator('page') } = options;
+    const { id: pageId = this.idGenerator() } = options;
     if (this._hasPage(pageId)) {
       throw new Error('page already exists');
     }

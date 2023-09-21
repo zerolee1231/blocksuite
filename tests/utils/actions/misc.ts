@@ -155,7 +155,7 @@ async function initEmptyEditor({
           initPage(page);
         });
       } else {
-        const page = workspace.createPage({ id: 'page:home' });
+        const page = workspace.createPage({ id: 'page0' });
         page.waitForLoaded().then(() => {
           initPage(page);
         });

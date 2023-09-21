@@ -78,6 +78,9 @@ export class BlockIndexer {
     });
 
     Array.from(doc.spaces.keys())
+      .map(pageId =>
+        pageId.startsWith('space:') ? pageId.slice('space:'.length) : pageId
+      )
       .map(pageId => ({ pageId, page: this._getPage(pageId) }))
       .forEach(({ pageId, page }) => {
         assertExists(page, `Failed to find page '${pageId}'`);
@@ -201,6 +204,10 @@ export class BlockIndexer {
   };
 
   private _getPage(pageId: PageId): Y.Doc | undefined {
+    if (pageId.startsWith('space:')) {
+      throw new Error(`Unexpected 'space:' prefix for: ${pageId}`);
+    }
+    pageId = `space:${pageId}`;
     return this._doc.spaces.get(pageId) as Y.Doc | undefined;
   }
 

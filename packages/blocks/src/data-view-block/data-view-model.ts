@@ -31,7 +31,7 @@ export class DataViewBlockModel extends BaseBlockModel<Props> {
 
   addView(mode: DataView['mode']) {
     this.page.captureSync();
-    const id = this.page.generateBlockId();
+    const id = this.page.generateId();
     this.page.transact(() => {
       this.views.push({
         id,

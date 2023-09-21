@@ -93,7 +93,7 @@ export class Store {
       awareness,
       idGenerator,
       defaultFlags,
-    }: StoreOptions = { id: nanoid('workspace') }
+    }: StoreOptions = { id: nanoid() }
   ) {
     this.id = id;
     this.doc = new BlockSuiteDoc({ guid: id });
@@ -146,10 +146,10 @@ export class Store {
   }
 
   addSpace(space: Space) {
-    this.spaces.set(space.id, space);
+    this.spaces.set(space.prefixedId, space);
   }
 
   removeSpace(space: Space) {
-    this.spaces.delete(space.id);
+    this.spaces.delete(space.prefixedId);
   }
 }

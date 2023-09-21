@@ -134,7 +134,7 @@ async function main() {
 
   subscribePage(workspace);
   if (initParam !== null) {
-    await initPageContentByParam(workspace, initParam, 'page:home');
+    await initPageContentByParam(workspace, initParam, 'page0');
     return;
   }
 

@@ -48,7 +48,7 @@ export class DatabaseBlockModel extends BaseBlockModel<DatabaseBlockProps> {
   }
 
   initTemplate(viewType: DataViewTypes) {
-    const ids = [nanoid('unknown'), nanoid('unknown'), nanoid('unknown')];
+    const ids = [nanoid(), nanoid(), nanoid()];
     const statusId = this.addColumn(
       'end',
       selectPureColumnConfig.create('Status', {
@@ -88,7 +88,7 @@ export class DatabaseBlockModel extends BaseBlockModel<DatabaseBlockProps> {
   }
 
   addView(type: DataViewTypes) {
-    const id = this.page.generateBlockId();
+    const id = this.page.generateId();
     const viewConfig = viewManager.getView(type);
     const view = viewConfig.init(this, id, viewConfig.defaultName);
     this.page.transact(() => {
@@ -170,7 +170,7 @@ export class DatabaseBlockModel extends BaseBlockModel<DatabaseBlockProps> {
       id?: string;
     }
   ): string {
-    const id = column.id ?? this.page.generateBlockId();
+    const id = column.id ?? this.page.generateId();
     if (this.columns.find(v => v.id === id)) {
       return id;
     }
@@ -273,7 +273,7 @@ export class DatabaseBlockModel extends BaseBlockModel<DatabaseBlockProps> {
 
 const migration = {
   toV3: data => {
-    const id = nanoid('unknown');
+    const id = nanoid();
     // @ts-expect-error
     const title = data['titleColumnName'];
     // @ts-expect-error

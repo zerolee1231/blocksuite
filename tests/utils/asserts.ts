@@ -69,7 +69,7 @@ export const defaultStore: SerializedStore = {
     },
     pages: [
       {
-        id: 'page:home',
+        id: 'page0',
         title: '',
         tags: [],
       },
@@ -92,7 +92,7 @@ export const defaultStore: SerializedStore = {
     pageVersion: PAGE_VERSION,
   },
   spaces: {
-    'page:home': {
+    'space:page0': {
       blocks: {
         '0': {
           'prop:title': '',
@@ -498,7 +498,7 @@ export async function assertMatchMarkdown(page: Page, text: string) {
   const jsonDoc = (await page.evaluate(() =>
     window.workspace.doc.toJSON()
   )) as SerializedStore;
-  const titleNode = jsonDoc['page:home']['0'] as Record<string, unknown>;
+  const titleNode = jsonDoc['space:page0']['0'] as Record<string, unknown>;
 
   const markdownVisitor = (node: Record<string, unknown>): string => {
     // TODO use schema
@@ -528,7 +528,7 @@ export async function assertMatchMarkdown(page: Page, text: string) {
       // return visitor(node);
     }
 
-    const children = node['sys:children'].map(id => jsonDoc['page:home'][id]);
+    const children = node['sys:children'].map(id => jsonDoc['space:page0'][id]);
     return [
       visitor(node),
       ...children.flatMap(child =>

@@ -13,6 +13,7 @@ export class Space<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   State extends Record<string, unknown> = Record<string, any>,
 > {
+  /** unprefixed id */
   readonly id: string;
   readonly doc: BlockSuiteDoc;
   readonly awarenessStore: AwarenessStore;
@@ -38,6 +39,10 @@ export class Space<
 
     this._yBlocks = this._ySpaceDoc.getMap('blocks');
     this._proxy = this.doc.proxy.createYProxy(this._yBlocks as Y.Map<unknown>);
+  }
+
+  get prefixedId() {
+    return this.id.startsWith('space:') ? this.id : `space:${this.id}`;
   }
 
   get loaded() {
@@ -68,7 +73,7 @@ export class Space<
 
   remove() {
     this.destroy();
-    this.doc.spaces.delete(this.id);
+    this.doc.spaces.delete(this.prefixedId);
   }
 
   destroy() {
@@ -82,12 +87,19 @@ export class Space<
   }
 
   private _initSubDoc = () => {
-    let subDoc = this.doc.spaces.get(this.id);
+    const prefixedId = this.prefixedId;
+
+    let subDoc = this.doc.spaces.get(prefixedId);
     if (!subDoc) {
+      const rootDocId = this.doc.guid;
       subDoc = new Y.Doc({
-        guid: this.id,
+        // this is
+        // to make sure that the guid is unique
+        // when we create the demo workspace in AFFiNE
+        // and import the same page doc multiple times
+        guid: `${rootDocId}:${prefixedId}`,
       });
-      this.doc.spaces.set(this.id, subDoc);
+      this.doc.spaces.set(prefixedId, subDoc);
       this._loaded = true;
       this._onLoadSlot.emit();
     } else {

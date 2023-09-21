@@ -723,7 +723,7 @@ export class DebugMenu extends ShadowlessElement {
 }
 
 function createPageBlock(workspace: Workspace) {
-  const id = workspace.idGenerator('page');
+  const id = workspace.idGenerator();
   createPage(workspace, { id }).catch(console.error);
 }
 
