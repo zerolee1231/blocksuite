@@ -97,7 +97,7 @@ export class DatabaseBlockModel extends BaseBlockModel<DatabaseBlockProps> {
     return view;
   }
   duplicateView(id: string): string {
-    const newId = this.page.generateBlockId();
+    const newId = this.page.generateId();
     this.page.transact(() => {
       const index = this.views.findIndex(v => v.id === id);
       const view = this.views[index];
