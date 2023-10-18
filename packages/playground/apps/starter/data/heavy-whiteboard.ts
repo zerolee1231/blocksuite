@@ -55,7 +55,7 @@ export const heavyWhiteboard: InitFn = async (
         id,
         index: 'a0',
         type: 'shape',
-        xywh: `[${x},${y},100,100]`,
+        xywh: [x, y, 100, 100],
         seed: Math.floor(Math.random() * 2 ** 31),
 
         shapeType: SHAPE_TYPES[Math.floor(Math.random() * 40) % 4] as ShapeType,
