@@ -256,6 +256,7 @@ export class EdgelessChangeShapeButton extends WithDisposable(LitElement) {
 
       component-toolbar-menu-divider {
         margin: 0 12px;
+        height: 24px;
       }
     `,
   ];
@@ -317,8 +318,8 @@ export class EdgelessChangeShapeButton extends WithDisposable(LitElement) {
     const textColor = isTransparent(fillColor)
       ? GET_DEFAULT_LINE_COLOR()
       : fillColor === SHAPE_FILL_COLOR_BLACK
-      ? SHAPE_TEXT_COLOR_PURE_WHITE
-      : SHAPE_TEXT_COLOR_PURE_BLACK;
+        ? SHAPE_TEXT_COLOR_PURE_WHITE
+        : SHAPE_TEXT_COLOR_PURE_BLACK;
 
     return textColor;
   }

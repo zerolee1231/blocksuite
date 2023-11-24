@@ -1,10 +1,10 @@
 // something comes from https://github.com/excalidraw/excalidraw/blob/b1311a407a636c87ee0ca326fd20599d0ce4ba9b/src/utils.ts
 
-import type { CanvasTextFontFamily } from '../../consts.js';
-import {
-  CANVAS_TEXT_FONT_FAMILY,
-  type CanvasTextFontWeight,
+import type {
+  CanvasTextFontFamily,
+  CanvasTextFontStyle,
 } from '../../consts.js';
+import { type CanvasTextFontWeight } from '../../consts.js';
 import type { Bound } from '../../utils/bound.js';
 import type { TextElement } from './text-element.js';
 import type { ITextDelta } from './types.js';
@@ -22,14 +22,21 @@ export const isChrome =
 export const isSafari =
   !isChrome && globalThis.navigator?.userAgent.indexOf('Safari') !== -1;
 
-export function getLineHeight(fontFamily: string, fontSize: number) {
+export function wrapFontFamily(fontFamily: CanvasTextFontFamily): string {
+  return `"${fontFamily}"`;
+}
+
+export function getLineHeight(
+  fontFamily: CanvasTextFontFamily,
+  fontSize: number
+) {
   // Browser may have minimum font size setting
   // so we need to multiple the multiplier between the actual size and the expected size
   const actualFontSize = Math.max(fontSize, 12);
   const div = document.createElement('div');
   const span = document.createElement('span');
 
-  span.style.fontFamily = fontFamily;
+  span.style.fontFamily = wrapFontFamily(fontFamily);
   span.style.fontSize = actualFontSize + 'px';
   span.style.lineHeight = 'initial';
   span.textContent = 'M';
@@ -51,10 +58,12 @@ export function getFontString({
   fontStyle: string;
   fontWeight: string;
   fontSize: number;
-  fontFamily: string;
+  fontFamily: CanvasTextFontFamily;
 }): string {
   const lineHeight = getLineHeight(fontFamily, fontSize);
-  return `${fontStyle} ${fontWeight} ${fontSize}px/${lineHeight}px ${fontFamily}`.trim();
+  return `${fontStyle} ${fontWeight} ${fontSize}px/${lineHeight}px ${wrapFontFamily(
+    fontFamily
+  )}`.trim();
 }
 
 export function normalizeText(text: string): string {
@@ -390,25 +399,42 @@ export function normalizeTextBound(
   return bound;
 }
 
+export function getFontFacesByFontFamily(
+  fontFamily: CanvasTextFontFamily
+): FontFace[] {
+  const fonts = document.fonts;
+  return (
+    [...fonts.keys()]
+      .filter(fontFace => {
+        return fontFace.family === fontFamily;
+      })
+      // remove duplicate font faces
+      .filter(
+        (item, index, arr) =>
+          arr.findIndex(
+            fontFace =>
+              fontFace.family === item.family &&
+              fontFace.weight === item.weight &&
+              fontFace.style === item.style
+          ) === index
+      )
+  );
+}
+
 export function isFontWeightSupported(
-  font: CanvasTextFontFamily,
+  fontFamily: CanvasTextFontFamily,
   weight: CanvasTextFontWeight
 ) {
-  const fonts = document.fonts;
-  const fontFace = [...fonts.keys()].find(fontFace => {
-    return fontFace.family === font && fontFace.weight === weight;
-  });
+  const fontFaces = getFontFacesByFontFamily(fontFamily);
+  const fontFace = fontFaces.find(fontFace => fontFace.weight === weight);
   return !!fontFace;
 }
 
-export function getSupportedFontWeight(font: CanvasTextFontFamily): string[] {
-  const fonts = document.fonts;
-  const fontFaces = [...fonts.keys()].filter(fontFace => {
-    return fontFace.family === font;
-  });
-  return fontFaces.map(fontFace => fontFace.weight);
-}
-
-export function checkFontFamily(font: string): boolean {
-  return CANVAS_TEXT_FONT_FAMILY.includes(font);
+export function isFontStyleSupported(
+  fontFamily: CanvasTextFontFamily,
+  style: CanvasTextFontStyle
+) {
+  const fontFaces = getFontFacesByFontFamily(fontFamily);
+  const fontFace = fontFaces.find(fontFace => fontFace.style === style);
+  return !!fontFace;
 }

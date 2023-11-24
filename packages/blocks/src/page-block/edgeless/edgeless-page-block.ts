@@ -30,7 +30,6 @@ import {
   type ReorderingAction,
   type TopLevelBlockModel,
 } from '../../_common/utils/index.js';
-import { keys, pick } from '../../_common/utils/iterable.js';
 import { EdgelessClipboard } from '../../_legacy/clipboard/index.js';
 import { getService } from '../../_legacy/service/index.js';
 import type { ImageBlockModel } from '../../image-block/index.js';
@@ -41,6 +40,7 @@ import {
   Bound,
   clamp,
   getCommonBound,
+  GroupElement,
   type IBound,
   intersects,
   type IVec,
@@ -212,10 +212,11 @@ export class EdgelessPageBlockComponent extends BlockElement<
 
     elementUpdated: new Slot<{
       id: string;
-      props: Record<string, unknown>;
     }>(),
     elementAdded: new Slot<string>(),
     elementRemoved: new Slot<{ id: string; element: EdgelessElement }>(),
+    elementResizeStart: new Slot(),
+    elementResizeEnd: new Slot(),
   };
 
   @query('affine-surface')
@@ -546,6 +547,12 @@ export class EdgelessPageBlockComponent extends BlockElement<
       if (!elementsSet.has(id) || !this.surface.pickById(id)) return;
 
       const element = this.surface.pickById(id) as EdgelessElement;
+
+      if (element instanceof GroupElement) {
+        this.applyLocalRecord(element.childElements.map(e => e.id));
+        return;
+      }
+
       const updateProps: Record<string, unknown> = {};
       let flag = false;
 
@@ -757,21 +764,15 @@ export class EdgelessPageBlockComponent extends BlockElement<
 
   private _initLocalRecordManager() {
     this.localRecord = new LocalRecordManager<PhasorElementLocalRecordValues>();
-    this.localRecord.slots.updated.on(({ id, data }) => {
+    this.localRecord.slots.updated.on(({ id }) => {
       const element = this.surface.pickById(id);
 
       if (!element) return;
 
       this.surface.refresh();
 
-      const changedProps = pick(
-        data.new,
-        keys(data.new).filter(key => key in element)
-      );
-
       this.slots.elementUpdated.emit({
         id,
-        props: changedProps,
       });
     });
 
@@ -790,7 +791,6 @@ export class EdgelessPageBlockComponent extends BlockElement<
           case 'update':
             this.slots.elementUpdated.emit({
               id: event.id,
-              props: event.props,
             });
             break;
           case 'add':
