@@ -9,6 +9,7 @@ import './frame/frame-tool-button.js';
 import './default/default-tool-button.js';
 import './text/text-tool-button.js';
 import './eraser/eraser-tool-button.js';
+import './frame/navigator-setting-button.js';
 
 import { WithDisposable } from '@blocksuite/lit';
 import { baseTheme } from '@toeverything/theme';
@@ -365,6 +366,9 @@ export class EdgelessToolbar extends WithDisposable(LitElement) {
         bound = Bound.fromCenter(center, w, h);
       }
       viewport.setViewportByBound(bound, [0, 0, 0, 0], false);
+      this.edgeless.slots.navigatorFrameChanged.emit(
+        this._frames[this._currentFrameIndex]
+      );
     }
   }
 
@@ -388,6 +392,9 @@ export class EdgelessToolbar extends WithDisposable(LitElement) {
         this._currentFrameIndex = this._cachedIndex;
       }, 400);
     }
+
+    setTimeout(() => this._moveToCurrentFrame(), 400);
+    this.edgeless.slots.fullScrennToggled.emit();
   }
 
   private get frameNavigatorContent() {
@@ -437,6 +444,7 @@ export class EdgelessToolbar extends WithDisposable(LitElement) {
           ? NavigatorExitFullScreenIcon
           : NavigatorFullScreenIcon}
       </edgeless-tool-icon-button>
+      <edgeless-navigator-setting-button> </edgeless-navigator-setting-button>
       <div class="short-divider"></div>
       <div
         class="edgeless-frame-navigator-stop"
