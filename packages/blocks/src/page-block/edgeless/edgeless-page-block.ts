@@ -213,6 +213,10 @@ export class EdgelessPageBlockComponent extends BlockElement<
     tagClicked: new Slot<{ tagId: string }>(),
     readonlyUpdated: new Slot<boolean>(),
     draggingAreaUpdated: new Slot(),
+    navigatorSettingUpdated: new Slot<{
+      hideToolbar?: boolean;
+      blackBackground?: boolean;
+    }>(),
     navigatorFrameChanged: new Slot<FrameBlockModel>(),
     fullScrennToggled: new Slot(),
 

@@ -1,13 +1,16 @@
 import './frame-order-menu.js';
 import '../../buttons/tool-icon-button.js';
+import '../../../../../_common/components/toggle-switch.js';
 
 import { WithDisposable } from '@blocksuite/lit';
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, type PropertyValues } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import { NavigatorSettingsIcon } from '../../../../../_common/icons/edgeless.js';
 import type { EdgelessPageBlockComponent } from '../../../edgeless-page-block.js';
 import { createButtonPopper } from '../../utils.js';
+
+const blackBackgroundKey = 'blocksuite:' + 'presentation' + ':blackBackground';
 
 @customElement('edgeless-navigator-setting-button')
 export class EdgelessNavigatorSettingButton extends WithDisposable(LitElement) {
@@ -51,8 +54,11 @@ export class EdgelessNavigatorSettingButton extends WithDisposable(LitElement) {
   @state()
   blackBackground = true;
 
-  @state()
-  showToolbar = false;
+  @property({ attribute: false })
+  hideToolbar = false;
+
+  @property({ attribute: false })
+  onHideToolbarChange?: (hideToolbar: boolean) => void;
 
   @property({ attribute: false })
   edgeless!: EdgelessPageBlockComponent;
@@ -71,6 +77,25 @@ export class EdgelessNavigatorSettingButton extends WithDisposable(LitElement) {
       this._navigatorSettingMenu,
       ({ display }) => (this._popperShow = display === 'show')
     );
+
+    this._tryRestoreSettings();
+  }
+
+  private _tryRestoreSettings() {
+    const blackBackground = sessionStorage.getItem(blackBackgroundKey);
+    this.blackBackground = blackBackground !== 'false';
+  }
+
+  override updated(_changedProperties: PropertyValues) {
+    if (_changedProperties.has('blackBackground')) {
+      this.edgeless.slots.navigatorSettingUpdated.emit({
+        blackBackground: this.blackBackground,
+      });
+      sessionStorage.setItem(
+        blackBackgroundKey,
+        this.blackBackground.toString()
+      );
+    }
   }
 
   override render() {
@@ -94,22 +119,27 @@ export class EdgelessNavigatorSettingButton extends WithDisposable(LitElement) {
           <div class="text title">Settings</div>
         </div>
         <div class="item-container">
-          <div class="text">Black Background</div>
-          <slide-button
-            .checked=${this.blackBackground}
-            .onChange=${(checked: boolean) => (this.blackBackground = checked)}
-          >
-          </slide-button>
-        </div>
-        <div class="item-container">
           <div class="text">Hide toolbar while presenting</div>
-          <slide-button
-            .checked=${this.showToolbar}
+          <toggle-switch
+            .on=${this.hideToolbar}
             .onChange=${(checked: boolean) => {
-              this.showToolbar = checked;
+              this.onHideToolbarChange && this.onHideToolbarChange(checked);
+              if (checked) {
+                this._navigatorSettingPopper?.hide();
+              }
             }}
           >
-          </slide-button>
+          </toggle-switch>
+        </div>
+        <div class="item-container">
+          <div class="text">Hide background while presenting</div>
+          <toggle-switch
+            .on=${!this.blackBackground}
+            .onChange=${(checked: boolean) => {
+              this.blackBackground = !checked;
+            }}
+          >
+          </toggle-switch>
         </div>
       </div>
     `;

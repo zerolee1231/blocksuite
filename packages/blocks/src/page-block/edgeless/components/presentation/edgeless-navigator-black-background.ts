@@ -38,8 +38,19 @@ export class EdgelessNavigatorBlackBackground extends WithDisposable(
     );
 
     _disposables.add(
+      edgeless.slots.navigatorSettingUpdated.on(({ blackBackground }) => {
+        if (blackBackground !== undefined) {
+          this.show =
+            blackBackground && edgeless.edgelessTool.type === 'frameNavigator';
+        }
+      })
+    );
+
+    _disposables.add(
       edgeless.slots.edgelessToolUpdated.on(tool => {
-        this.show = Boolean(tool.type === 'frameNavigator');
+        if (tool.type !== 'frameNavigator') {
+          this.show = false;
+        }
       })
     );
 
