@@ -73,7 +73,7 @@ class ImageBlock extends BlockElement<ImageBlockModel> {
   @state()
   protected _source!: string;
 
-  blob!: Blob;
+  blob?: Blob;
 
   @state()
   protected _imageState: 'waitUploaded' | 'loading' | 'ready' | 'failed' =
@@ -141,7 +141,7 @@ class ImageBlock extends BlockElement<ImageBlockModel> {
 @customElement('affine-edgeless-image')
 class ImageBlockEdgelessComponent extends ImageBlock {
   get surface() {
-    return this.closest('affine-surface');
+    return this.closest('affine-edgeless-page')?.surface;
   }
 
   override render() {
